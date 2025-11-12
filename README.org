@@ -3,12 +3,12 @@
 *  Table of Contents :TOC:
 -  [[#about][About]]
 -  [[#main-goals-for-version-one][Main Goals for Version One]]
-  -  [[#setup-gin-project][Setup Gin project]]
-  -  [[#build-endpoints-to-accept-image][Build Endpoints to accept image]]
-  -  [[#build-logic-to-manipulate-file][Build logic to manipulate file]]
-  -  [[#optional-might-add-docker-container-if-needed][OPTIONAL Might add docker container if needed]]
-  -  [[#write-tests-and-test-code][Write tests and test code]]
-  -  [[#deploy-to-render][Deploy to render]]
+  -  [[#setup-gin-project-done][Setup Gin project DONE]]
+  -  [[#build-endpoints-to-accept-image-todo][Build Endpoints to accept image TODO]]
+  -  [[#build-logic-to-manipulate-file-todo][Build logic to manipulate file TODO]]
+  -  [[#optional-might-add-docker-container-if-needed-todo][OPTIONAL Might add docker container if needed TODO]]
+  -  [[#write-tests-and-test-code-todo][Write tests and test code TODO]]
+  -  [[#deploy-to-render-todo][Deploy to render TODO]]
 -  [[#end-of-version-one-roadmap][End of version one roadmap]]
 
 *  About
@@ -16,13 +16,13 @@ This project is about building a concurrent API.
 It will take requests and perform operations on them such as resize, compress, and change color.
 
 *  Main Goals for Version One
-**  TODO Setup Gin project
-**  TODO Build Endpoints to accept image
+**  DONE Setup Gin project DONE
+**  TODO Build Endpoints to accept image TODO
 +  NOTE: probably a simple put and get endpoint for now.
-**  TODO Build logic to manipulate file
+**  TODO Build logic to manipulate file TODO
 +  NOTE: It will do just one process for version one
-**  OPTIONAL Might add docker container if needed
-**  TODO Write tests and test code
-**  TODO Deploy to render
+**  OPTIONAL Might add docker container if needed TODO
+**  TODO Write tests and test code TODO
+**  TODO Deploy to render TODO
 *  End of version one roadmap
 Will add more goals and plans as the project develops
