@@ -4,7 +4,7 @@
 -  [[#about][About]]
 -  [[#main-goals-for-version-one][Main Goals for Version One]]
   -  [[#setup-gin-project-done][Setup Gin project DONE]]
-  -  [[#build-endpoints-to-accept-image-todo][Build Endpoints to accept image TODO]]
+  -  [[#build-endpoints-to-accept-image-done][Build Endpoints to accept image DONE]]
   -  [[#build-logic-to-manipulate-file-todo][Build logic to manipulate file TODO]]
   -  [[#optional-might-add-docker-container-if-needed-todo][OPTIONAL Might add docker container if needed TODO]]
   -  [[#write-tests-and-test-code-todo][Write tests and test code TODO]]
@@ -17,8 +17,7 @@ It will take requests and perform operations on them such as resize, compress, a
 
 *  Main Goals for Version One
 **  DONE Setup Gin project DONE
-**  TODO Build Endpoints to accept image TODO
-+  NOTE: probably a simple put and get endpoint for now.
+**  DONE Build Endpoints to accept image DONE
 **  TODO Build logic to manipulate file TODO
 +  NOTE: It will do just one process for version one
 **  OPTIONAL Might add docker container if needed TODO
