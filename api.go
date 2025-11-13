@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/davidbyttow/govips/v2/vips"
 )
 
 /*
@@ -14,9 +15,41 @@ import (
  *  Util Functions
  *
  */
+func processImage(imageData []byte, width int, height int) ([]byte, error) {
+	// Loads imageData ([]bytes) and returns imageRef (*vips.ImageRef)
+	imageRef, err := vips.NewImageFromBuffer(imageData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load image from buffer: %w", err)
+	}
+	defer imageRef.Close() // Close image ref after completion
 
-func processFileContents(data []byte) []byte {
-	// For this example, we'll just prepend a simple header to simulate processing.
+	err = imageRef.Thumbnail(width, height, vips.Interesting(vips.InterestingAll))
+	if err != nil {
+		return nil, fmt.Errorf("failed to thumbnail image: %w", err)
+	}
+
+	exportParams := vips.NewJpegExportParams()
+	exportParams.Quality = 85 // Set desired quality
+	exportParams.StripMetadata = true // Remove unnecessary metadata
+
+	imageOutputBytes, _, err := imageRef.ExportJpeg(exportParams)
+	if err != nil {
+		return nil, fmt.Errorf("failed to export image to bytes: %w", err)
+	}
+
+	return imageOutputBytes, nil
+}
+
+func processFileContents(data []byte) ([]byte, error) {
+	// --- VIPS Initialization ---
+	// This is needed to call the function above
+	// MUST be called before any other VIPS function.
+	vips.Startup(&vips.Config{
+		ConcurrencyLevel: 1, // Control internal threading
+	})
+	defer vips.Shutdown() // MUST be called to clean up resources
+
+
 	header := []byte("--- Processed by API ---\n")
 
 	// Create a new byte slice by combining the header and the original data
@@ -24,7 +57,13 @@ func processFileContents(data []byte) []byte {
 	processedData.Write(header)
 	processedData.Write(data)
 
-	return processedData.Bytes()
+	resizedImage, err := processImage(processedData.Bytes(), 500, 500)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to process image bytes: %w", err)
+	}
+
+	return resizedImage, nil
+
 }
 
 /*
@@ -67,10 +106,14 @@ func fileEndpoint(c *gin.Context) {
 	}
 
 	// Process file contents
-	processedData := processFileContents(fileBytes)
+	processedData, err := processFileContents(fileBytes)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Image process failed: " + err.Error()})
+		return
+	}
 
 	// Set content type
-	contentType := "image/png"
+	contentType := "image/jpeg"
 
 	c.Data(http.StatusOK, contentType, processedData)
 	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=\"processed_%s\"", fileHeader.Filename))
