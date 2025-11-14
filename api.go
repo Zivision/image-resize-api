@@ -3,11 +3,12 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"image/jpeg"
 	"io"
 	"net/http"
 
+	"github.com/disintegration/imaging"
 	"github.com/gin-gonic/gin"
-	"github.com/davidbyttow/govips/v2/vips"
 )
 
 /*
@@ -15,55 +16,36 @@ import (
  *  Util Functions
  *
  */
-func processImage(imageData []byte, width int, height int) ([]byte, error) {
-	// Loads imageData ([]bytes) and returns imageRef (*vips.ImageRef)
-	imageRef, err := vips.NewImageFromBuffer(imageData)
+func processJpeg(jpegBytes []byte) ([]byte, error) {
+	// Deocode image bytes
+	img, err := jpeg.Decode(bytes.NewReader(jpegBytes))
 	if err != nil {
-		return nil, fmt.Errorf("failed to load image from buffer: %w", err)
-	}
-	defer imageRef.Close() // Close image ref after completion
-
-	err = imageRef.Thumbnail(width, height, vips.Interesting(vips.InterestingAll))
-	if err != nil {
-		return nil, fmt.Errorf("failed to thumbnail image: %w", err)
+		return nil, fmt.Errorf("failed to decode image bytes: %w", err)
 	}
 
-	exportParams := vips.NewJpegExportParams()
-	exportParams.Quality = 85 // Set desired quality
-	exportParams.StripMetadata = true // Remove unnecessary metadata
+	// Flip Vertically (Will add more features later)
+	flippedImg := imaging.FlipV(img)
 
-	imageOutputBytes, _, err := imageRef.ExportJpeg(exportParams)
+	// Declare return byte buffer
+	var buf bytes.Buffer
+
+	// Re-encode it
+	err = jpeg.Encode(&buf, flippedImg, &jpeg.Options{Quality: 90})
 	if err != nil {
-		return nil, fmt.Errorf("failed to export image to bytes: %w", err)
+		return nil, fmt.Errorf("failed to encode flipped image: %w", err)
 	}
 
-	return imageOutputBytes, nil
+	// Return result
+	return buf.Bytes(), nil
 }
 
-func processFileContents(data []byte) ([]byte, error) {
-	// --- VIPS Initialization ---
-	// This is needed to call the function above
-	// MUST be called before any other VIPS function.
-	vips.Startup(&vips.Config{
-		ConcurrencyLevel: 1, // Control internal threading
-	})
-	defer vips.Shutdown() // MUST be called to clean up resources
-
-
-	header := []byte("--- Processed by API ---\n")
-
-	// Create a new byte slice by combining the header and the original data
-	var processedData bytes.Buffer
-	processedData.Write(header)
-	processedData.Write(data)
-
-	resizedImage, err := processImage(processedData.Bytes(), 500, 500)
+func sortImageType(data []byte) ([]byte, error) {
+	// TODO Will add sorting for different file types and operations
+	proccesedImg, err := processJpeg(data)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to process image bytes: %w", err)
+		return nil, fmt.Errorf("failed to process image: %w", err)
 	}
-
-	return resizedImage, nil
-
+	return proccesedImg, nil
 }
 
 /*
@@ -79,34 +61,40 @@ func testEndpoint(c *gin.Context) {
 	})
 }
 
-func fileEndpoint(c *gin.Context) {
-	// Takes file from endpoint
-	fileHeader, err := c.FormFile("file") // "file" is expected form field key
+func imageEndpoint(c *gin.Context) {
+	file, err := c.FormFile("image")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to retrieve file: " + err.Error(),
+			"error": "No file uploaded",
+		})
+		return
+	}
+
+	if file.Size > 10*1024*1024 { // 10MB limit
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "File size exceeds 10MB",
 		})
 		return
 	}
 
 	// Attempts to open the file
-	file, err := fileHeader.Open()
+	image, err := file.Open()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to open file: " + err.Error()})
 		return
 	}
 	// Close file
-	defer file.Close()
+	defer image.Close()
 
-	// Process file into bytes
-	fileBytes, err := io.ReadAll(file)
+	// Process image into bytes
+	imageBytes, err := io.ReadAll(image)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read file contents: " + err.Error()})
 		return
 	}
 
 	// Process file contents
-	processedData, err := processFileContents(fileBytes)
+	processedData, err := sortImageType(imageBytes)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Image process failed: " + err.Error()})
 		return
@@ -115,6 +103,7 @@ func fileEndpoint(c *gin.Context) {
 	// Set content type
 	contentType := "image/jpeg"
 
+	// Send image back
 	c.Data(http.StatusOK, contentType, processedData)
-	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=\"processed_%s\"", fileHeader.Filename))
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=\"processed_%s\"", file.Filename))
 }

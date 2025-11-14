@@ -17,7 +17,7 @@ func main() {
 	{
 		v1 := r.Group("/api/v1")
 		v1.GET("/test", testEndpoint)
-		v1.POST("/file", fileEndpoint)
+		v1.POST("/image", imageEndpoint)
 	}
 	// Start server on port 8080 (default)
 	// Server will listen on 0.0.0.0:8080 (localhost:8080 on Windows)
