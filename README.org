@@ -5,8 +5,8 @@
 -  [[#main-goals-for-version-one][Main Goals for Version One]]
   -  [[#setup-gin-project-done][Setup Gin project DONE]]
   -  [[#build-endpoints-to-accept-image-done][Build Endpoints to accept image DONE]]
-  -  [[#build-logic-to-manipulate-file-in-progress][Build logic to manipulate file IN PROGRESS]]
-  -  [[#return-file-contents-to-user-todo][Return file contents to user TODO]]
+  -  [[#build-logic-to-manipulate-file-done][Build logic to manipulate file DONE]]
+  -  [[#return-file-contents-to-user-done][Return file contents to user DONE]]
   -  [[#might-add-docker-container-if-needed-todo][Might add docker container if needed TODO]]
   -  [[#write-tests-and-test-code-todo][Write tests and test code TODO]]
   -  [[#deploy-to-render-todo][Deploy to render TODO]]
@@ -19,11 +19,9 @@ It will take requests and perform operations on them such as resize, compress, a
 *  Main Goals for Version One
 **  DONE Setup Gin project DONE
 **  DONE Build Endpoints to accept image DONE
-**  TODO Build logic to manipulate file IN PROGRESS
-+  NOTE: It will do just one process for version one
-**  TODO Return file contents to user TODO
+**  DONE Build logic to manipulate file DONE
+**  DONE Return file contents to user DONE
 **  TODO Might add docker container if needed TODO
-+  NOTE: Will probably do this because of govips (libvips)
 **  TODO Write tests and test code TODO
 **  TODO Deploy to render TODO
 *  End of version one roadmap
