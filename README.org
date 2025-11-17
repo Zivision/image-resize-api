@@ -8,7 +8,7 @@
   -  [[#build-logic-to-manipulate-file-done][Build logic to manipulate file DONE]]
   -  [[#return-file-contents-to-user-done][Return file contents to user DONE]]
   -  [[#refactor-maingo-for-aws-deployment-done][Refactor main.go for AWS deployment DONE]]
-  -  [[#add-docker-container-in-progress][Add Docker container IN PROGRESS]]
+  -  [[#add-docker-container-done][Add Docker container DONE]]
   -  [[#write-tests-and-test-code-todo][Write tests and test code TODO]]
   -  [[#deploy-to-aws-todo][Deploy to AWS TODO]]
 -  [[#end-of-version-one-roadmap][End of version one roadmap]]
@@ -23,7 +23,7 @@ It will take requests and perform operations on them such as resize, compress, a
 **  DONE Build logic to manipulate file DONE
 **  DONE Return file contents to user DONE
 **  DONE Refactor main.go for AWS deployment DONE
-**  TODO Add Docker container IN PROGRESS
+**  DONE Add Docker container DONE
 **  TODO Write tests and test code TODO
 **  TODO Deploy to AWS TODO
 *  End of version one roadmap
