@@ -1,0 +1,26 @@
+# --- Version Control and OS Files ---
+.git
+.gitignore
+.vscode/           # Visual Studio Code settings
+.idea/             # IntelliJ/GoLand settings
+.DS_Store          # macOS temporary files
+
+# --- Go Build Artifacts (Go typically generates this file) ---
+# Your Dockerfile takes care of the binary, but this excludes any local main binary
+# built during development from being sent to the builder stage.
+main
+*.test
+*.out
+
+# --- Development & Test Files ---
+# Exclude test cache and coverage reports
+.cache/
+test/
+tmp/
+logs/
+*.log
+
+# --- Sensitive/Configuration Files ---
+# Never include local environment variables or secrets!
+.env
+.env.*
