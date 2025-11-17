@@ -7,9 +7,10 @@
   -  [[#build-endpoints-to-accept-image-done][Build Endpoints to accept image DONE]]
   -  [[#build-logic-to-manipulate-file-done][Build logic to manipulate file DONE]]
   -  [[#return-file-contents-to-user-done][Return file contents to user DONE]]
-  -  [[#might-add-docker-container-if-needed-todo][Might add docker container if needed TODO]]
+  -  [[#refactor-maingo-for-aws-deployment-todo][Refactor main.go for AWS deployment TODO]]
+  -  [[#add-docker-container-todo][Add Docker container TODO]]
   -  [[#write-tests-and-test-code-todo][Write tests and test code TODO]]
-  -  [[#deploy-to-render-todo][Deploy to render TODO]]
+  -  [[#deploy-to-aws-todo][Deploy to AWS TODO]]
 -  [[#end-of-version-one-roadmap][End of version one roadmap]]
 
 *  About
@@ -21,8 +22,9 @@ It will take requests and perform operations on them such as resize, compress, a
 **  DONE Build Endpoints to accept image DONE
 **  DONE Build logic to manipulate file DONE
 **  DONE Return file contents to user DONE
-**  TODO Might add docker container if needed TODO
+**  DONE Refactor main.go for AWS deployment TODO
+**  TODO Add Docker container TODO
 **  TODO Write tests and test code TODO
-**  TODO Deploy to render TODO
+**  TODO Deploy to AWS TODO
 *  End of version one roadmap
 Will add more goals and plans as the project develops

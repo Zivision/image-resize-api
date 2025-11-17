@@ -16,6 +16,7 @@ import (
  *  Util Functions
  *
  */
+
 func processJpeg(jpegBytes []byte) ([]byte, error) {
 	// Deocode image bytes
 	img, err := jpeg.Decode(bytes.NewReader(jpegBytes))
